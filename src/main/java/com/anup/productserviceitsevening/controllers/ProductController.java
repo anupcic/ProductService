@@ -47,12 +47,19 @@ public class ProductController {
 //
 //    }
     @GetMapping("/{productId}")
-    public Product getProductById(@PathVariable Long productId){
-        return productService.getProductById(productId);
+    public ResponseEntity<Product> getProductById(@PathVariable Long productId){
+        Product product= productService.getProductById(productId);
+
+        //ResponseEntity<Product> responseEntity ;
+        if (product == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(product, HttpStatus.OK);
     }
     @PutMapping("/{productId}")
-    public String updateProduct( @PathVariable("productId") Long productId){
-        return "Product Updated for id: " + productId;
+    public Product updateProduct( @PathVariable("productId") Long productId,@RequestBody Product product){
+        return productService.updateProduct(productId,product);
     }
     @DeleteMapping("/{productId}")
     public String deleteProduct(@PathVariable("productId") Long productId){
